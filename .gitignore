@@ -1,0 +1,9 @@
+cub3D
+*.o
+*.d
+*.a
+*.swp
+
+# Folders
+obj/
+lib/minilibx/

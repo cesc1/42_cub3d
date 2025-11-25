@@ -1,0 +1,6 @@
+test_libft*
+*.a
+*.o
+main.c
+*.out
+*.qmd
