@@ -101,7 +101,8 @@ re: fclean all
 export_src:
 	@echo \
 		$(addprefix $(SRC_DIR)/, $(SRC)) \
-		$(addprefix $(INCLUDE_DIR)/, $(INCLUDE))
+		$(addprefix $(INCLUDE_DIR)/, $(INCLUDE)) \
+		Makefile
 
 -include $(DEP)
 
