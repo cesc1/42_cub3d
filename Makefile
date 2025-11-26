@@ -13,6 +13,7 @@ MLX_DIR := $(LIB)/minilibx
 LIBFT := $(LIBFT_DIR)/libft.a
 LIBMLX := $(MLX_DIR)/libmlx.a
 MLX_CONFIG := $(MLX_DIR)/configure
+MLX_STAMP := $(MLX_DIR)/.downloaded
 
 # Files (don't add "src/")
 SRC := main.c
@@ -56,14 +57,16 @@ $(NAME):  $(LIBFT) $(LIBMLX) $(OBJ)
 $(LIBFT): $(SRC_LIBFT)
 	$(MAKE) -C $(LIBFT_DIR)
 
-$(LIBMLX): $(MLX_CONFIG) $(SRC_MLX)
+$(LIBMLX): $(MLX_STAMP) $(SRC_MLX)
 	cd $(MLX_DIR) && ./configure
 
-$(MLX_CONFIG):
+$(MLX_STAMP):
+	rm -rf $(MLX_DIR)
 	wget https://github.com/42paris/minilibx-linux/archive/refs/heads/master.zip -O minilibx.zip
 	unzip minilibx.zip
 	rm minilibx.zip
 	mv minilibx-linux-master $(MLX_DIR)
+	touch $(MLX_STAMP)
 
 # Objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c Makefile
