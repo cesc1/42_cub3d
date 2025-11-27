@@ -16,7 +16,10 @@ MLX_CONFIG := $(MLX_DIR)/configure
 MLX_STAMP := $(MLX_DIR)/.downloaded
 
 # Files (don't add "src/")
-SRC := main.c
+SRC := main.c \
+	   error.c \
+	   import_tmp_map.c \
+	   import_tmp_map_utils.c
 
 OBJ := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 DEP := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.d))
