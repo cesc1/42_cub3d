@@ -16,7 +16,13 @@ MLX_CONFIG := $(MLX_DIR)/configure
 MLX_STAMP := $(MLX_DIR)/.downloaded
 
 # Files (don't add "src/")
-SRC := main.c
+SRC := main.c \
+		Utils/trgb.c \
+		Utils/open_mlx.c \
+		Utils/close_mlx.c \
+		Utils/my_mlx_func.c \
+		Utils/draw.c \
+		Logic/handle_input.c \
 
 OBJ := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 DEP := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.d))
