@@ -17,15 +17,15 @@ MLX_STAMP := $(MLX_DIR)/.downloaded
 
 # Files (don't add "src/")
 SRC := main.c \
-	     error.c \
-	     import_tmp_map.c \
-	     import_tmp_map_utils.c
-		   Utils/trgb.c \
-		   Utils/open_mlx.c \
-		   Utils/close_mlx.c \
-		   Utils/my_mlx_func.c \
-		   Utils/draw.c \
-		   Logic/handle_input.c \
+	   error.c \
+	   import_tmp_map.c \
+	   import_tmp_map_utils.c \
+	   Utils/trgb.c \
+	   Utils/open_mlx.c \
+	   Utils/close_mlx.c \
+	   Utils/my_mlx_func.c \
+	   Utils/draw.c \
+	   Logic/handle_input.c
 
 
 OBJ := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
@@ -50,7 +50,7 @@ SRC_MLX := $(addprefix $(MLX_DIR)/, $(SRC_MLX))
 # Flags
 CC := cc
 IFLAGS := -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
-CFLAGS := -Wall -Werror -Wextra -g -MMD -MP $(IFLAGS)
+CFLAGS := -Wall -Werror -Wextra -g -MMD -MP $(IFLAGS) #-fsanitize=address
 LDFLAGS := -L/usr/lib -lXext -lX11 -lm
 
 
