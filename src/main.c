@@ -1,14 +1,27 @@
 #include "cub3d.h"
+
+#include <X11/X.h>
+
 #include "libft.h"
 #include "mlx.h"
-#include <X11/X.h>
 
 int	main(void)
 {
-	t_mlx_vars	mlx;
-	int			x;
+	t_input	input;
+ 	t_mlx_vars	mlx;
+  int			x;
 	int			y;
 
+	input.map = import_tmp_map("data/fakemap.cub");
+	input.texture_n = "...";
+	input.texture_s = "...";
+	input.texture_e = "...";
+	input.texture_o = "...";
+	input.col_c = 0x00000000;
+	input.col_f = 0x00000000;
+	print_map(&input);
+	free_map(input.map);
+//========================	
 	x = 1000;
 	y = 1000;
 	if (open_win(&mlx, x, y, "cub3d") != 0)
