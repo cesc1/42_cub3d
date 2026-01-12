@@ -50,7 +50,7 @@ SRC_MLX := $(addprefix $(MLX_DIR)/, $(SRC_MLX))
 # Flags
 CC := cc
 IFLAGS := -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
-CFLAGS := -Wall -Wextra -g -MMD -MP $(IFLAGS) #-fsanitize=address
+CFLAGS := -Wall -Werror -Wextra -g -MMD -MP $(IFLAGS) #-fsanitize=address
 LDFLAGS := -L/usr/lib -lXext -lX11 -lm
 
 
