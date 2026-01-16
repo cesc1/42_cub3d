@@ -2,15 +2,15 @@
 # define CUB3D_H
 
 # include "stddef.h"
-# include <stdio.h> //Libreria necesaria para .h?
+# include <sys/types.h>
 
 // Enum types
 typedef enum e_return_status
 {
 	OK,
+    ERR,
 	ERR_MALLOC,
-	ERR_OPEN,
-	ERR_PARSER
+	ERR_OPEN
 }					t_return_status;
 
 // Estructura para inputs
@@ -21,10 +21,13 @@ typedef struct s_input
 	char			*texture_s;
 	char			*texture_e;
 	char			*texture_o;
-	unsigned int	col_c;
-	unsigned int	col_f;
+	ssize_t	        col_c;
+	ssize_t     	col_f;
 	int				w;
 	int				h;
+    int             start_x;
+    int             start_y;
+    char            start_dir;
 }					t_input;
 
 // Img_data // estructruara para acelerar la impresion de pixeles
@@ -80,6 +83,8 @@ typedef struct s_mlx_vars
 }					t_mlx_vars;
 
 // Functions import
+int                 parser(int argc, char **argv, t_input *input);
+
 char				**import_tmp_map(const char *path);
 void				print_map(const t_input *input);
 void				free_map(char **map);

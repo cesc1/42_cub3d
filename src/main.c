@@ -3,9 +3,10 @@
 #include "mlx.h"
 #include <X11/X.h>
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_input		input;
+    /*
 	t_mlx_vars	mlx;
 
 	input.map = import_tmp_map("data/fakemapgp.cub");
@@ -32,5 +33,7 @@ int	main(void)
 	mlx_hook(mlx.win, KeyPress, KeyPressMask, handle_input, &mlx);
 	mlx_hook(mlx.win, 17, 0L, close_mlx, &mlx);
 	mlx_loop(mlx.mlx);
+    */
+    parser(argc, argv, &input);
 	return (0);
 }
