@@ -1,61 +1,34 @@
 #include "cub3d.h"
 #include <math.h>
 
-// void	draw_filled_circle(t_img_data *data, int xc, int yc, int r, int color)
-// {
-// 	int	x;
-// 	int	y;
+void	draw_back(t_img_data *img, int sx, int sy, t_input imp)
+{
+	int	y;
+	int	x;
 
-// 	y = -r;
-// 	while (y <= r)
-// 	{
-// 		x = -r;
-// 		while (x <= r)
-// 		{
-// 			if (x * x + y * y <= r * r)
-// 				my_mlx_pixel_put(data, xc + x, yc + y, color);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
+	y = 0;
+	while (y < (sy / 2))
+	{
+		x = 0;
+		while (x != sx)
+		{
+			my_mlx_pixel_put(img, x, y, imp.col_c);
+			x++;
+		}
+		y++;
+	}
+	while (y != sy)
+	{
+		x = 0;
+		while (x != sx)
+		{
+			my_mlx_pixel_put(img, x, y, imp.col_f);
+			x++;
+		}
+		y++;
+	}
+}
 
-// void	draw_cros(t_img_data *data, int x_size, int y_size, int color)
-// {
-// 	int	x;
-// 	int	y;
-
-// 	x = x_size / 2;
-// 	y = 0;
-// 	while (y <= y_size)
-// 	{
-// 		my_mlx_pixel_put(data, x, y++, color);
-// 	}
-// 	y = y_size / 2;
-// 	x = 0;
-// 	while (x <= x_size)
-// 	{
-// 		my_mlx_pixel_put(data, x++, y, color);
-// 	}
-// }
-
-// void	draw_vison(t_img_data *data, double *pos, double *v_vis, int color)
-// {
-// 	double	t;
-// 	int		x;
-// 	int		y;
-
-// 	t = 0;
-// 	while (t < 2000)
-// 	{
-// 		x = (int)(pos[0] + v_vis[0] * t);
-// 		y = (int)(pos[1] + v_vis[1] * t);
-// 		if (x < 0 || x >= 1000 || y < 0 || y >= 1000)
-// 			break ;
-// 		my_mlx_pixel_put(data, x, y, color);
-// 		t += 0.1;
-// 	}
-// }
 void	drawVerLine(t_img_data *img, int x, int *draw, int color)
 {
 	int	y;
@@ -130,13 +103,7 @@ void	init_vision(t_vision *v, char **map)
 	char	direccion;
 
 	direccion = initialpos(map, v->pos);
-	// v->pos[0] = 22;
-	// v->pos[1] = 12;
 	initialdir(direccion, v->dir, v->plane);
-	// v->dir[0] = -1.0;
-	// v->dir[1] = 0.0;
-	//	v->plane[0] = 0.66;
-	//	v->plane[1] = 0;
 }
 void	clear_image(t_img_data *data, int width, int height, int color)
 {
@@ -167,8 +134,10 @@ void	draw_full_vision(t_img_data *data, t_vision *v, int *s, t_input imp)
 {
 	int	x;
 	int	hit;
+	int	wall_color;
 
-	clear_image(data, s[0], s[1], create_trgb(0, 0, 0, 255));
+	// clear_image(data, s[0], s[1], create_trgb(0, 0, 0, 255));
+	draw_back(data, s[0], s[1], imp);
 	x = 0;
 	while (x < s[0])
 	{
@@ -238,38 +207,20 @@ void	draw_full_vision(t_img_data *data, t_vision *v, int *s, t_input imp)
 		if (v->draw[1] >= s[1])
 			v->draw[1] = s[1] - 1;
 		if (v->side == 0)
-			drawVerLine(data, x, v->draw, create_trgb(0, 255, 0, 255));
+		{
+			if (v->rayDir[0] > 0)
+				wall_color = create_trgb(0, 255, 0, 0); // Pared OESTE
+			else
+				wall_color = create_trgb(0, 0, 255, 0); // Pared ESTE
+		}
 		else
-			drawVerLine(data, x, v->draw, create_trgb(0, 255, 0, 255));
+		{
+			if (v->rayDir[1] > 0)
+				wall_color = create_trgb(0, 0, 0, 255); // Pared NORTE
+			else
+				wall_color = create_trgb(0, 255, 255, 0); // Pared SUR
+		}
+		drawVerLine(data, x, v->draw, wall_color);
 		x++;
 	}
 }
-// void	draw_full_vision(t_img_data *data, t_vision *v)
-// {
-// 	// Calcular puntos del plano de cámara
-// 	clear_image(data, 1000, 1000, create_trgb(0, 0, 0, 0));
-// 	v->plane1[0] = v->pos[0] + v->v_vis[0] * v->fov_scale + v->v_per[0]
-// 		* v->fov_scale;
-// 	v->plane1[1] = v->pos[1] + v->v_vis[1] * v->fov_scale + v->v_per[1]
-// 		* v->fov_scale;
-// 	v->plane2[0] = v->pos[0] + v->v_vis[0] * v->fov_scale - v->v_per[0]
-// 		* v->fov_scale;
-// 	v->plane2[1] = v->pos[1] + v->v_vis[1] * v->fov_scale - v->v_per[1]
-// 		* v->fov_scale;
-// 	// Dibujar cruz central
-// 	draw_cros(data, 1000, 1000, create_trgb(0, 0, 0, 255));
-// 	// Dibujar jugador (círculo verde)
-// 	draw_filled_circle(data, (int)v->pos[0], (int)v->pos[1], 10, create_trgb(0,
-// 			255, 0, 255));
-// 	// Dibujar rayo central de visión (azul)
-// 	draw_vison(data, v->pos, v->v_vis, create_trgb(0, 0, 255, 255));
-// 	// Dibujar línea del plano de cámara (amarillo)
-// 	draw_line(data, v->plane1, v->plane2, create_trgb(0, 255, 255, 0));
-// 	// Calcular y dibujar rayos hacia los extremos
-// 	v->v_dir[0] = v->plane1[0] - v->pos[0];
-// 	v->v_dir[1] = v->plane1[1] - v->pos[1];
-// 	draw_vison(data, v->pos, v->v_dir, create_trgb(0, 0, 255, 255));
-// 	v->v_dir[0] = v->plane2[0] - v->pos[0];
-// 	v->v_dir[1] = v->plane2[1] - v->pos[1];
-// 	draw_vison(data, v->pos, v->v_dir, create_trgb(0, 0, 255, 255));
-//}
