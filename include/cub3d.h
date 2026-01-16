@@ -37,20 +37,6 @@ typedef struct s_img_data
 	int				endian;
 }					t_img_data;
 
-// Vision // estructura para los valores de visión
-
-// typedef struct s_vision
-// {
-// 	double pos[2];    // Posición del jugador
-// 	double v_vis[2];  // Vector de visión principal
-// 	double v_per[2];  // Vector perpendicular (plano cámara)
-// 	double plane1[2]; // Punto izquierdo del plano
-// 	double plane2[2]; // Punto derecho del plano
-// 	double v_dir[2];  // Vector direccional temporal
-// 	double fov_scale; // Escala del campo de visión
-// 	double			ang;
-// }					t_vision;
-
 typedef struct s_vision
 {
 	double			pos[2];
@@ -68,15 +54,28 @@ typedef struct s_vision
 	int				lineHeight;
 }					t_vision;
 
+// Input_state // estructura para un moviminto mas fino
+typedef struct s_input_state
+{
+	int				w;
+	int				a;
+	int				s;
+	int				d;
+	int				left;
+	int				right;
+	int				escape;
+}					t_input_state;
+
 // Mlx_vars // estructrura necesaria para el correcto funcionamiento de hook
 typedef struct s_mlx_vars
 {
 	void			*mlx;
 	void			*win;
+	int				screen[2];
 	t_img_data		img;
 	t_vision		vision;
 	t_input			input;
-	int				screen[2];
+	t_input_state	input_state;
 }					t_mlx_vars;
 
 // Functions import
@@ -97,12 +96,7 @@ int					get_g(int trgb);
 int					get_b(int trgb);
 
 // temp Funcion to test // Utils/draw.c
-void				draw_filled_circle(t_img_data *data, int xc, int yc, int r,
-						int color);
-void				draw_cros(t_img_data *data, int x_size, int y_size,
-						int color);
-void				draw_vison(t_img_data *data, double *pos, double *v_vis,
-						int color);
+
 void				clear_image(t_img_data *data, int width, int height,
 						int color);
 void				draw_full_vision(t_img_data *data, t_vision *vision,
@@ -118,7 +112,10 @@ int					close_mlx(t_mlx_vars *vars);
 // Funcion open_win // Utils/open.mlx.c
 int					open_win(t_mlx_vars *data, int x, int y, char *name);
 
-// Funcions to handel the input // Logic/handle_input.c
-int					handle_input(int keysym, t_mlx_vars *data);
+// Funcions to handle continuous input // Logic/handle_input.c
+int					key_press(int keysym, t_mlx_vars *data);
+int					key_release(int keysym, t_mlx_vars *data);
+int					game_loop(t_mlx_vars *data);
+void				update_movement(t_mlx_vars *data);
 
 #endif
