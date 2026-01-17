@@ -83,8 +83,11 @@ typedef struct s_mlx_vars
 }					t_mlx_vars;
 
 // Functions import
+int                 check_args(int argc);
+void                init_input(t_input *input);
 int                 parser(int argc, char **argv, t_input *input);
-
+int                 save_texture(char *line, char **ptr_save, int line_num);
+int                 save_color(char *line, ssize_t *ptr_save, int line_num);
 char				**import_tmp_map(const char *path);
 void				print_map(const t_input *input);
 void				free_map(char **map);

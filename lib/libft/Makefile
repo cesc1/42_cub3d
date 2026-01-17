@@ -68,7 +68,8 @@ SRC = ft_isalpha.c \
        printf_cs_print_x.c \
        printf_cs_print_utils.c \
        get_next_line.c \
-       get_next_line_utils.c
+       get_next_line_utils.c \
+	   ft_free_split.c
 
 INCLUDE := libft.h \
 		   get_next_line.h \

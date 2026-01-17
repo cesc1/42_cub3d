@@ -19,6 +19,8 @@ MLX_STAMP := $(MLX_DIR)/.downloaded
 SRC := main.c \
 	   Utils/error.c \
 	   Parser/parser.c \
+	   Parser/init_input_args.c \
+	   Parser/save_texture.c \
 	   Parser/import_tmp_map.c \
 	   Parser/import_tmp_map_utils.c \
 	   Utils/trgb.c \
