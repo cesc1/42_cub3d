@@ -35,5 +35,7 @@ int	main(int argc, char **argv)
 	mlx_loop(mlx.mlx);
     */
     parser(argc, argv, &input);
+    input_print(&input);
+    free_input(&input);
 	return (0);
 }

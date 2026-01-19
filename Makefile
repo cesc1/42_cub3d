@@ -21,8 +21,8 @@ SRC := main.c \
 	   Parser/parser.c \
 	   Parser/init_input_args.c \
 	   Parser/save_texture.c \
-	   Parser/import_tmp_map.c \
-	   Parser/import_tmp_map_utils.c \
+	   Parser/map.c \
+	   Parser/file_reader.c \
 	   Utils/trgb.c \
 	   Utils/open_mlx.c \
 	   Utils/close_mlx.c \
@@ -53,7 +53,7 @@ SRC_MLX := $(addprefix $(MLX_DIR)/, $(SRC_MLX))
 # Flags
 CC := cc
 IFLAGS := -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
-CFLAGS := -Wall -Werror -Wextra -g -MMD -MP $(IFLAGS) #-fsanitize=address
+CFLAGS := -Wall -Werror -Wextra -g -MMD -MP $(IFLAGS) -fsanitize=address
 LDFLAGS := -L/usr/lib -lXext -lX11 -lm
 
 

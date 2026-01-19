@@ -6,7 +6,8 @@
 
 #include "libft.h"
 
-static int parse_line(t_input *input, char *line, int line_num)
+
+static int parse_line(t_input *input, char *line, int line_num, int fd)
 {
     if (line[0] == '\n')
         return (OK);
@@ -22,8 +23,8 @@ static int parse_line(t_input *input, char *line, int line_num)
         return (save_color(line + 1, &(input->col_f), line_num));
     if (ft_strncmp(line, "C", 1) == 0)
         return (save_color(line + 1, &(input->col_c), line_num));
-    if (ft_strchr(" 1", line[0])) 
-        {/* Parse map */}
+    if (ft_strchr(" 1", line[0]))
+        return (create_map(input, line, fd));
     return (ft_printf("Error\n.cub: Wrong line (l%d)\n", line_num), ERR);
 }
 
@@ -38,7 +39,7 @@ static int parse_cub(t_input *input, int fd_cub)
     while (line)
     {
         line_count++;
-        res_parse_line = parse_line(input, line, line_count);
+        res_parse_line = parse_line(input, line, line_count, fd_cub);
         free(line);
         if (res_parse_line != OK || input->map != NULL)
             return (res_parse_line);
@@ -52,9 +53,9 @@ int parser(int argc, char **argv, t_input *input)
     int fd_cub;
     int res_parse_cub;
 
+    init_input(input);
     if (check_args(argc) != OK)
         return (ERR);
-    init_input(input);
     fd_cub = open(argv[1], O_RDONLY);
     if (fd_cub == -1)
         return (print_error(ERR_OPEN), ERR);
