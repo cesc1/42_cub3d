@@ -3,141 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 15:06:07 by faguirre          #+#    #+#             */
-/*   Updated: 2024/09/30 13:13:52 by faguirre         ###   ########.fr       */
+/*   Created: 2024/07/08 12:09:34 by gpolo             #+#    #+#             */
+/*   Updated: 2024/07/16 16:56:11 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
-#include <unistd.h>
 
-static ssize_t	find_pos(char *str, char c, ssize_t pos)
+static char	*get_line_from_buffer(char **buffer)
 {
-	if (pos == -1)
-		pos++;
-	while (str[pos])
-	{
-		if (str[pos] == c)
-		{
-			return (pos);
-		}
-		pos++;
-	}
-	return (-1);
-}
+	char	*newline_pos;
+	char	*line;
+	char	*rest;
 
-static ssize_t	load_buffer(int fd, t_static *s, char **line)
-{
-	ssize_t	bytes_loaded;
-
-	bytes_loaded = read(fd, s->buffer, BUFFER_SIZE);
-	if ((bytes_loaded == -1) || \
-		((bytes_loaded == 0) && (gnl_strlen(*line) == 0)))
+	newline_pos = gnl_strchr(*buffer, '\n');
+	if (newline_pos)
 	{
-		free(*line);
-		*line = NULL;
-		return (bytes_loaded);
+		line = gnl_substr(*buffer, 0, newline_pos - *buffer + 1);
+		rest = gnl_strdup(newline_pos + 1);
+		free(*buffer);
+		*buffer = rest;
 	}
-	else if (bytes_loaded == 0)
-		return (bytes_loaded);
-	(s->buffer)[bytes_loaded] = '\0';
-	s->pos0 = 0;
-	return (bytes_loaded);
-}
-
-static char	*calc_line(t_static *s, int fd, char *line)
-{
-	s->pos1 = find_pos(s->buffer, '\n', s->pos0);
-	while (s->pos1 == -1)
-	{
-		line = gnl_strjoin_free(line, &s->buffer[s->pos0], 1);
-		s->bytes_loaded = load_buffer(fd, s, &line);
-		if ((s->bytes_loaded == -1) || ((s->bytes_loaded == 0) && !line))
-			return (NULL);
-		else if (s->bytes_loaded == 0)
-			break ;
-		s->pos1 = find_pos(s->buffer, '\n', s->pos0);
-	}
-	line = gnl_strjoin_free(line, \
-			gnl_substr(s->buffer, s->pos0, s->pos1 - s->pos0 + 1), 3);
-	if (s->bytes_loaded == 0)
-		s->pos0 = -1;
 	else
-		s->pos0 = s->pos1 + 1;
+	{
+		line = gnl_strdup(*buffer);
+		free(*buffer);
+		*buffer = NULL;
+	}
 	return (line);
+}
+
+static int	read_into_buffer(int fd, char **buffer)
+{
+	char	*temp_buffer;
+	char	*read_buffer;
+	ssize_t	bytes_read;
+
+	read_buffer = (char *)malloc(BUFFER_SIZE + 1);
+	bytes_read = read(fd, read_buffer, BUFFER_SIZE);
+	if (bytes_read <= 0)
+	{
+		free(read_buffer);
+		return (bytes_read);
+	}
+	read_buffer[bytes_read] = '\0';
+	temp_buffer = gnl_strjoin(*buffer, read_buffer);
+	free(*buffer);
+	free(read_buffer);
+	*buffer = temp_buffer;
+	return (bytes_read);
+}
+
+static int	read_until_newline(int fd, char **buffer)
+{
+	int	bytes_read;
+
+	while (!gnl_strchr(*buffer, '\n'))
+	{
+		bytes_read = read_into_buffer(fd, buffer);
+		if (bytes_read == 0)
+			return (0);
+		if (bytes_read < 0)
+		{
+			free(*buffer);
+			*buffer = NULL;
+			return (-1);
+		}
+	}
+	return (0);
 }
 
 char	*get_next_line(int fd)
 {
-	char			*line;
-	static t_static	s = {-1, -1, -1, ""};
+	static char	*buffer;
+	char		*line;
 
-	line = NULL;
-	if (s.pos0 == -1)
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	if (!buffer)
+		buffer = gnl_strdup("");
+	if (read_until_newline(fd, &buffer) < 0)
+		return (0);
+	if (*buffer)
+		line = get_line_from_buffer(&buffer);
+	else
 	{
-		s.bytes_loaded = load_buffer(fd, &s, &line);
-		if (s.bytes_loaded <= 0)
-			return (NULL);
+		free(buffer);
+		buffer = NULL;
+		line = NULL;
 	}
-	line = calc_line(&s, fd, line);
 	return (line);
 }
-/*
-#include <stdio.h>
-#include <fcntl.h>
-
-int	main(int argc, char **argv)
-{
-	int	fd;
-	char	*str;
-	int	flag;
-
-	if (argc != 2)
-		return (1);
-	flag = 1;
-	fd = open(argv[1], O_RDONLY);
-	while (flag)
-	{
-		str = get_next_line(fd);
-		if (!str)
-		{
-			flag = 0;
-		}
-		printf("%s", str);
-		free(str);
-	}
-}
-*/
-/*
-#include <stdio.h>
-#include <fcntl.h>
-
-int     main()
-{
-        int     fd[2];
-        char    *str1;
-        char    *str2;
-        int     flag;
-
-        flag = 1;
-        fd[0] = open("test1.txt", O_RDONLY);
-        fd[1] = open("test2.txt", O_RDONLY);
-        while (flag)
-        {
-                str1 = get_next_line(fd[0]);
-                str2 = get_next_line(fd[1]);
-                if (!str1 && !str2)
-                {
-                        flag = 0;
-                        break ;
-                }
-                printf("%s", str1);
-                printf("%s", str2);
-                free(str1);
-                free(str2);
-        }
-}
-*/

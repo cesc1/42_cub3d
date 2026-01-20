@@ -2,15 +2,18 @@
 # define CUB3D_H
 
 # include "stddef.h"
-# include <stdio.h> //Libreria necesaria para .h?
+# include <sys/types.h>
+
+// Defines
+# define FILE_DATA_CAP_INIT 16
 
 // Enum types
 typedef enum e_return_status
 {
 	OK,
+	ERR,
 	ERR_MALLOC,
-	ERR_OPEN,
-	ERR_PARSER
+	ERR_OPEN
 }					t_return_status;
 
 // Estructura para inputs
@@ -21,11 +24,23 @@ typedef struct s_input
 	char			*texture_s;
 	char			*texture_e;
 	char			*texture_o;
-	unsigned int	col_c;
-	unsigned int	col_f;
+	ssize_t			col_c;
+	ssize_t			col_f;
 	int				w;
 	int				h;
+	int				start_row;
+	int				start_col;
+	char			start_dir;
 }					t_input;
+
+// Estructura para file_reader
+typedef struct s_file_data
+{
+	char			**data;
+	size_t			size;
+	size_t			capacity;
+	size_t			max_width;
+}					t_file_data;
 
 // Img_data // estructruara para acelerar la impresion de pixeles
 typedef struct s_img_data
@@ -99,11 +114,17 @@ typedef struct s_mlx_vars
 }					t_mlx_vars;
 
 // Functions import
-char				**import_tmp_map(const char *path);
-void				print_map(const t_input *input);
-void				free_map(char **map);
-int					is_char_map(const char c);
-int					is_line_map(const char *line);
+int					check_args(int argc);
+void				init_input(t_input *input);
+void				free_input(t_input *input);
+int					parser(int argc, char **argv, t_input *input);
+int					save_texture(char *line, char **ptr_save, int line_num);
+int					save_color(char *line, ssize_t *ptr_save, int line_num);
+int					create_map(t_input *input, char *line, int fd);
+void				input_print(t_input *input);
+int					file_data_init(t_file_data *file);
+int					file_data_push(t_file_data *file, char *line);
+void				file_data_free(t_file_data *file);
 
 // Functions error
 void				print_error(t_return_status type);

@@ -9,6 +9,6 @@ void	print_error(t_return_status r)
 	if (r == ERR_MALLOC || \
 		r == ERR_OPEN)
 	{
-		perror("Error\n");
+		perror("Error\nperror");
 	}
 }

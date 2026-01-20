@@ -3,83 +3,104 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 11:30:58 by faguirre          #+#    #+#             */
-/*   Updated: 2024/09/26 12:23:08 by faguirre         ###   ########.fr       */
+/*   Created: 2024/07/08 13:24:10 by gpolo             #+#    #+#             */
+/*   Updated: 2024/07/16 10:09:58 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "get_next_line.h"
-#include "libft.h"
-#include <stdlib.h>
 
-static void	free_strs(char *str1, char *str2, unsigned int num_free)
+static size_t	gnl_strlen(const char *s)
 {
-	if (num_free == 1 || num_free >= 3)
-		free(str1);
-	if (num_free == 2 || num_free >= 3)
-		free(str2);
+	size_t	c;
+
+	c = 0;
+	while (s[c] != '\0')
+		c++;
+	return (c);
 }
 
-size_t	gnl_strlen(const char *str)
+char	*gnl_strchr(const char *s, int c)
 {
-	size_t	i;
-
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char	*gnl_strjoin_free(char *str1, char *str2, unsigned int num_free)
-{
-	size_t	n1;
-	size_t	n2;
-	char	*result;
-
-	if (!str1 && !str2)
+	while (*s)
 	{
-		free_strs(str1, str2, num_free);
-		return (NULL);
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
 	}
-	n1 = gnl_strlen(str1);
-	n2 = gnl_strlen(str2);
-	result = (char *)malloc(n1 + n2 + 1);
-	if (str1)
-		ft_strlcpy(result, str1, n1 + 1);
-	else
-		result[0] = '\0';
-	if (str2)
-		ft_strlcpy(&result[n1], str2, n2 + 1);
-	free_strs(str1, str2, num_free);
-	return (result);
+	if (*s == (char)c)
+		return ((char *)s);
+	return (0);
+}
+
+char	*gnl_strdup(const char *s)
+{
+	char	*dup;
+	size_t	len;
+	size_t	c;	
+
+	len = gnl_strlen(s) + 1;
+	dup = (char *)malloc(len);
+	if (dup == NULL)
+		return (NULL);
+	c = 0;
+	if (!dup && !s)
+		return (0);
+	while (c < len)
+	{
+		((unsigned char *) dup)[c] = ((unsigned char *) s)[c];
+		c++;
+	}
+	return (dup);
+}
+
+char	*gnl_strjoin(char const *s1, char const *s2)
+{
+	char	*join;
+	int		leng;
+	int		c;
+	int		c2;
+
+	c = 0;
+	c2 = 0;
+	if (!s1 && !s2)
+		return (0);
+	leng = (gnl_strlen(s1) + gnl_strlen(s2));
+	join = (char *)malloc(sizeof(char) * (leng + 1));
+	if (!join)
+		return (0);
+	while (s1[c])
+	{
+		join[c] = s1[c];
+		c++;
+	}
+	while (s2[c2])
+		join[c++] = s2[c2++];
+	join[c] = '\0';
+	return (join);
 }
 
 char	*gnl_substr(char const *s, unsigned int start, size_t len)
 {
-	size_t	n_s;
-	size_t	n_res;
-	char	*result;
+	char	*substr;
+	size_t	c;
+	size_t	s_len;
 
-	if (!s)
+	c = 0;
+	s_len = gnl_strlen(s);
+	if (start >= s_len)
+		return (gnl_strdup(""));
+	if (len > s_len - start)
+		len = s_len - start;
+	substr = (char *)malloc(sizeof(char) * (len + 1));
+	if (substr == NULL)
 		return (NULL);
-	n_s = gnl_strlen(s);
-	if (start >= n_s)
+	while (s[start + c] && c < len)
 	{
-		result = (char *)malloc(1);
-		result[0] = '\0';
-		return (result);
+		substr[c] = s[start + c];
+		c++;
 	}
-	if (n_s - start < len)
-		n_res = n_s - start;
-	else
-		n_res = len;
-	result = (char *)malloc((n_res + 1) * sizeof (char));
-	if (!result)
-		return (NULL);
-	ft_strlcpy(result, &s[start], n_res + 1);
-	return (result);
+	substr[c] = '\0';
+	return (substr);
 }

@@ -17,9 +17,12 @@ MLX_STAMP := $(MLX_DIR)/.downloaded
 
 # Files (don't add "src/")
 SRC := main.c \
-	   error.c \
-	   import_tmp_map.c \
-	   import_tmp_map_utils.c \
+	   Utils/error.c \
+	   Parser/parser.c \
+	   Parser/init_input_args.c \
+	   Parser/save_texture.c \
+	   Parser/map.c \
+	   Parser/file_reader.c \
 	   Utils/trgb.c \
 	   Utils/open_mlx.c \
 	   Utils/close_mlx.c \
