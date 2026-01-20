@@ -8,8 +8,8 @@ void	open_img(t_mlx_vars *data, t_texture *img, char *str)
 	img->img = mlx_xpm_file_to_image(data->mlx, str, &img->width, &img->height);
 	if (img->img == NULL)
 	{
-		printf("Advertencia: No se pudo cargar la imagen %s\n", str);
-		printf("Se usará color por defecto\n");
+		// printf("Advertencia: No se pudo cargar la imagen %s\n", str);
+		// printf("Se usará color por defecto\n");
 		img->addr = NULL;
 		img->width = 0;
 		img->height = 0;

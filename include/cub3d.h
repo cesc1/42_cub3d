@@ -142,7 +142,7 @@ void				clear_image(t_img_data *data, int width, int height,
 						int color);
 void				draw_full_vision(t_mlx_vars *data, t_vision *vision,
 						int *screen, t_input imput);
-void				init_vision(t_vision *vision, char **map);
+void				init_vision(t_vision *vision, t_input *input);
 void				open_img(t_mlx_vars *data, t_texture *img, char *str);
 
 // Funcion i crete to render mlx // Utils/my_mlx_func.c

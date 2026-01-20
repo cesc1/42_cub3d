@@ -38,7 +38,7 @@ int	main(int argc, char **argv)
 	mlx.input_state.left = 0;
 	mlx.input_state.right = 0;
 	mlx.input_state.escape = 0;
-	init_vision(&mlx.vision, input.map);
+	init_vision(&mlx.vision, &input);
 	draw_full_vision(&mlx, &mlx.vision, mlx.screen, input);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img.img, 0, 0);
 	mlx_hook(mlx.win, KeyPress, KeyPressMask, key_press, &mlx);

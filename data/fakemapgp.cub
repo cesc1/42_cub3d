@@ -2,15 +2,15 @@
 F   22,100,0
 
 
-NO src/main.c
+NO data/textures/Walltest1.xpm
 
-SO Makefile
+SO data/textures/Walltest2.xpm
 
 C 69,69,69
-EA Makefile
+EA data/textures/Walltest4.xpm
 
 
-WE Makefile
+WE data/textures/Walltest3.xpm
 
 111111111111111111111111
 100000000000000000000001
