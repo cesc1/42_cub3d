@@ -6,21 +6,19 @@
 int	main(int argc, char **argv)
 {
 	t_input		input;
-    /*
 	t_mlx_vars	mlx;
 	int			i;
 
 	i = 0;
-	input.map = import_tmp_map("data/fakemapgp.cub");
-	input.texture_n = "...";
-	input.texture_s = "...";
-	input.texture_e = "...";
-	input.texture_o = "...";
-	input.col_c = 0x0000FFFF;
-	input.col_f = 0x00FFFFFF;
-	input.w = 60;
-	input.h = 60;
-	print_map(&input);
+	parser(argc, argv, &input);
+	// input.texture_n = "...";
+	// input.texture_s = "...";
+	// input.texture_e = "...";
+	// input.texture_o = "...";
+	// input_print(&input);
+	// input.col_c = 0x0000FFFF;
+	// input.col_f = 0x00FFFFFF;
+	//	print_map(&input);
 	mlx.input = input;
 	mlx.screen[0] = 1920;
 	mlx.screen[1] = 1080;
@@ -36,7 +34,7 @@ int	main(int argc, char **argv)
 	mlx.input_state.left = 0;
 	mlx.input_state.right = 0;
 	mlx.input_state.escape = 0;
-	init_vision(&mlx.vision, input.map);
+	init_vision(&mlx.vision, &input);
 	draw_full_vision(&mlx.img, &mlx.vision, mlx.screen, input);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img.img, 0, 0);
 	mlx_hook(mlx.win, KeyPress, KeyPressMask, key_press, &mlx);
@@ -44,9 +42,6 @@ int	main(int argc, char **argv)
 	mlx_hook(mlx.win, 17, 0L, close_mlx, &mlx);
 	mlx_loop_hook(mlx.mlx, game_loop, &mlx);
 	mlx_loop(mlx.mlx);
-    */
-    parser(argc, argv, &input);
-    input_print(&input);
-    free_input(&input);
+	free_input(&input);
 	return (0);
 }

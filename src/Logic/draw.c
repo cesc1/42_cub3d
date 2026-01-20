@@ -41,31 +41,6 @@ void	drawVerLine(t_img_data *img, int x, int *draw, int color)
 	}
 }
 
-char	initialpos(char **map, double pos[2])
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'W'
-				|| map[y][x] == 'E')
-			{
-				pos[0] = x + 0.5;
-				pos[1] = y + 0.5;
-				return (map[y][x]);
-			}
-			x++;
-		}
-		y++;
-	}
-	return (0);
-}
-
 void	initialdir(char direccion, double dir[2], double plane[2])
 {
 	if (direccion == 'N')
@@ -98,12 +73,11 @@ void	initialdir(char direccion, double dir[2], double plane[2])
 	}
 }
 
-void	init_vision(t_vision *v, char **map)
+void	init_vision(t_vision *v, t_input *input)
 {
-	char	direccion;
-
-	direccion = initialpos(map, v->pos);
-	initialdir(direccion, v->dir, v->plane);
+	v->pos[0] = input->start_col + 0.5;
+	v->pos[1] = input->start_row + 0.5;
+	initialdir(input->start_dir, v->dir, v->plane);
 }
 void	clear_image(t_img_data *data, int width, int height, int color)
 {
