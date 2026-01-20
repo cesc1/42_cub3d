@@ -29,7 +29,7 @@ static int  copy_map(t_file_data *raw_map, t_input *input)
         flag_endl = 0;
         while (++c < input->w)
         {
-            if (!raw_map->data[r][c] || raw_map->data[r][c] == '\n')
+            if (!flag_endl && (!raw_map->data[r][c] || raw_map->data[r][c] == '\n'))
                 flag_endl = 1;
             if (flag_endl)
                 input->map[r][c] = ' ';
@@ -72,7 +72,7 @@ static int  check_line(t_file_data *raw_map, char *line)
         if (!ft_strchr(" 01NSEW", line[i]))
             return (ERR);    
     }
-    while (line[i - 1] == ' ')
+    while (i > 0 && line[i - 1] == ' ')
         i--;
     if (i > (int)raw_map->max_width)
         raw_map->max_width = i;

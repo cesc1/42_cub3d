@@ -13,7 +13,11 @@ void    input_print(t_input *input)
     ft_printf("  - N: %s\n", input->texture_n);
     ft_printf("  - S: %s\n", input->texture_s);
     ft_printf("  - E: %s\n", input->texture_e);
-    ft_printf("  - O: %s\n\n", input->texture_o);
+    ft_printf("  - O: %s\n", input->texture_o);
+    ft_printf("  - Floor: %d %d %d\n", \
+        (input->col_f >> 16) & 0xFF, (input->col_f >> 8) & 0xFF, (input->col_f) & 0xFF);
+    ft_printf("  - Ceiling: %d %d %d\n\n", \
+        (input->col_c >> 16) & 0xFF, (input->col_c >> 8) & 0xFF, (input->col_c) & 0xFF);
     ft_printf("MAP:\n");
     ft_printf("  - Start: %c, (%d, %d)\n", \
         input->start_dir, input->start_row, input->start_col);

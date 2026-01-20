@@ -48,7 +48,7 @@ int file_data_push(t_file_data *file, char *line)
         i = -1;
         while (++i < (int)file->size)
             new_data[i] = file->data[i];
-        file_data_free(file);
+        free(file->data);
         file->data = new_data;
     }
     file->data[file->size++] = line;

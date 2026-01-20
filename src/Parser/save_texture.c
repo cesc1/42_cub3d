@@ -31,9 +31,9 @@ static int  col_str_to_ssize(char *str, ssize_t *ptr_save, int line_num)
     arr = ft_split(str, ',');
     if (!arr)
         return (ft_printf("Error\n.cub: Malloc (l%d)\n", line_num), ERR_MALLOC);
-    i = 0;
+    i = -1;
     *ptr_save = 0;
-    while (arr[i] && i < 4)
+    while (arr[++i] && i < 4)
     {
         if (str_isdigit_valid(arr[i]) != OK)
             return (ft_printf("Error\n.cub: Wrong color params (l%d)\n", line_num), \
@@ -43,6 +43,7 @@ static int  col_str_to_ssize(char *str, ssize_t *ptr_save, int line_num)
     if (i != 3)
         return (ft_printf("Error\n.cub: Wrong color params (l%d)\n", line_num), \
             ft_free_split(arr), ERR);
+    ft_free_split(arr);
     return (OK);
 }
 

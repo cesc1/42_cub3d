@@ -50,6 +50,8 @@ static ssize_t	load_buffer(int fd, t_static *s, char **line)
 
 static char	*calc_line(t_static *s, int fd, char *line)
 {
+    int add_l;
+
 	s->pos1 = find_pos(s->buffer, '\n', s->pos0);
 	while (s->pos1 == -1)
 	{
@@ -61,12 +63,13 @@ static char	*calc_line(t_static *s, int fd, char *line)
 			break ;
 		s->pos1 = find_pos(s->buffer, '\n', s->pos0);
 	}
-	line = gnl_strjoin_free(line, \
-			gnl_substr(s->buffer, s->pos0, s->pos1 - s->pos0 + 1), 3);
-	if (s->bytes_loaded == 0)
-		s->pos0 = -1;
-	else
-		s->pos0 = s->pos1 + 1;
+    if (s->pos1 != -1)
+        add_l = s->pos1 + 1;
+    else
+        add_l = gnl_strlen(s->buffer);
+    line = gnl_strjoin_free(line, \
+			gnl_substr(s->buffer, s->pos0, add_l - s->pos0), 3);
+    s->pos0 = add_l;
 	return (line);
 }
 
@@ -82,7 +85,9 @@ char	*get_next_line(int fd)
 		if (s.bytes_loaded <= 0)
 			return (NULL);
 	}
-	line = calc_line(&s, fd, line);
+    if (s.bytes_loaded == 0 && s.pos0 >= (ssize_t)gnl_strlen(s.buffer))
+        return (NULL);
+    line = calc_line(&s, fd, line);
 	return (line);
 }
 /*
