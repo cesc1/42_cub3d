@@ -3,36 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: faguirre <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/23 09:30:41 by faguirre          #+#    #+#             */
-/*   Updated: 2024/09/28 13:11:31 by faguirre         ###   ########.fr       */
+/*   Created: 2024/07/08 13:34:39 by gpolo             #+#    #+#             */
+/*   Updated: 2024/07/16 11:54:42 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <sys/types.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 100
+#  define BUFFER_SIZE 40
 # endif
 
-typedef struct s_static
-{
-	ssize_t	pos0;
-	ssize_t	pos1;
-	ssize_t	bytes_loaded;
-	char	buffer[BUFFER_SIZE + 1];
-}	t_static;
-
-// Main function
 char	*get_next_line(int fd);
-
-// Helper functions
-char	*gnl_strjoin_free(char *str1, char *str2, unsigned int num_free);
+void	*ft_calloc(size_t num, size_t size);
+char	*get_next_line(int fd);
+char	*gnl_strchr(const char *s, int c);
+char	*gnl_strdup(const char *s1);
+char	*gnl_strjoin(char const *s1, char const *s2);
 char	*gnl_substr(char const *s, unsigned int start, size_t len);
-size_t	gnl_strlen(const char *str);
 
 #endif
