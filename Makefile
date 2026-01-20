@@ -27,7 +27,7 @@ SRC := main.c \
 	   Utils/open_mlx.c \
 	   Utils/close_mlx.c \
 	   Utils/my_mlx_func.c \
-	   Utils/draw.c \
+	   Logic/draw.c \
 	   Logic/handle_input.c
 
 
