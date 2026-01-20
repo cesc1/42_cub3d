@@ -11,10 +11,10 @@ int	main(void)
 
 	i = 0;
 	input.map = import_tmp_map("data/fakemapgp.cub");
-	input.texture_n = "...";
-	input.texture_s = "...";
-	input.texture_e = "...";
-	input.texture_o = "...";
+	input.texture_n = "data/textures/Walltest1.xpm";
+	input.texture_s = "data/textures/Walltest2.xpm";
+	input.texture_e = "data/textures/Walltest3.xpm";
+	input.texture_o = "data/textures/Walltest4.xpm";
 	input.col_c = 0x0000FFFF;
 	input.col_f = 0x00FFFFFF;
 	input.w = 60;
@@ -28,6 +28,10 @@ int	main(void)
 	mlx.img.img = mlx_new_image(mlx.mlx, mlx.screen[0], mlx.screen[1]);
 	mlx.img.addr = mlx_get_data_addr(mlx.img.img, &mlx.img.bits_per_pixel,
 			&mlx.img.line_length, &mlx.img.endian);
+	open_img(&mlx, &mlx.textures.north, input.texture_n);
+	open_img(&mlx, &mlx.textures.south, input.texture_s);
+	open_img(&mlx, &mlx.textures.east, input.texture_e);
+	open_img(&mlx, &mlx.textures.west, input.texture_o);
 	mlx.input_state.w = 0;
 	mlx.input_state.a = 0;
 	mlx.input_state.s = 0;
@@ -36,7 +40,7 @@ int	main(void)
 	mlx.input_state.right = 0;
 	mlx.input_state.escape = 0;
 	init_vision(&mlx.vision, input.map);
-	draw_full_vision(&mlx.img, &mlx.vision, mlx.screen, input);
+	draw_full_vision(&mlx, &mlx.vision, mlx.screen, input);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img.img, 0, 0);
 	mlx_hook(mlx.win, KeyPress, KeyPressMask, key_press, &mlx);
 	mlx_hook(mlx.win, KeyRelease, KeyReleaseMask, key_release, &mlx);

@@ -37,6 +37,25 @@ typedef struct s_img_data
 	int				endian;
 }					t_img_data;
 
+typedef struct s_texture
+{
+	void			*img;
+	char			*addr;
+	int				width;
+	int				height;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+}					t_texture;
+
+typedef struct s_textures
+{
+	t_texture		north;
+	t_texture		south;
+	t_texture		east;
+	t_texture		west;
+}					t_textures;
+
 typedef struct s_vision
 {
 	double			pos[2];
@@ -76,6 +95,7 @@ typedef struct s_mlx_vars
 	t_vision		vision;
 	t_input			input;
 	t_input_state	input_state;
+	t_textures		textures;
 }					t_mlx_vars;
 
 // Functions import
@@ -99,9 +119,10 @@ int					get_b(int trgb);
 
 void				clear_image(t_img_data *data, int width, int height,
 						int color);
-void				draw_full_vision(t_img_data *data, t_vision *vision,
+void				draw_full_vision(t_mlx_vars *data, t_vision *vision,
 						int *screen, t_input imput);
 void				init_vision(t_vision *vision, char **map);
+void				open_img(t_mlx_vars *data, t_texture *img, char *str);
 
 // Funcion i crete to render mlx // Utils/my_mlx_func.c
 void				my_mlx_pixel_put(t_img_data *data, int x, int y, int color);

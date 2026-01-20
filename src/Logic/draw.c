@@ -1,5 +1,23 @@
 #include "cub3d.h"
+#include "mlx.h"
 #include <math.h>
+#include <stdlib.h>
+
+void	open_img(t_mlx_vars *data, t_texture *img, char *str)
+{
+	img->img = mlx_xpm_file_to_image(data->mlx, str, &img->width, &img->height);
+	if (img->img == NULL)
+	{
+		printf("Advertencia: No se pudo cargar la imagen %s\n", str);
+		printf("Se usará color por defecto\n");
+		img->addr = NULL;
+		img->width = 0;
+		img->height = 0;
+		return ;
+	}
+	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+			&img->line_length, &img->endian);
+}
 
 void	draw_back(t_img_data *img, int sx, int sy, t_input imp)
 {
@@ -129,15 +147,78 @@ double	get_delta_dist(double ray)
 		return (1e30);
 	return (fabs(1.0 / ray));
 }
+t_texture	*get_wall_texture(t_textures *textures, t_vision *v)
+{
+	if (v->side == 0)
+	{
+		if (v->rayDir[0] > 0)
+			return (&textures->west); // pared oeste
+		else
+			return (&textures->east); // pared este
+	}
+	else
+	{
+		if (v->rayDir[1] > 0)
+			return (&textures->north); // pared norte
+		else
+			return (&textures->south); // pared sur
+	}
+}
 
-void	draw_full_vision(t_img_data *data, t_vision *v, int *s, t_input imp)
+int	get_texture_pixel(t_texture *tex, int x, int y)
+{
+	char	*dst;
+
+	dst = tex->addr + (y * tex->line_length + x * (tex->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
+int	textures_are_loaded(t_textures *tex)
+{
+	return (tex->north.img != NULL && tex->north.addr != NULL
+		&& tex->south.img != NULL && tex->south.addr != NULL
+		&& tex->east.img != NULL && tex->east.addr != NULL
+		&& tex->west.img != NULL && tex->west.addr != NULL);
+}
+
+void	draw_textured_line(t_mlx_vars *data, int x, t_vision *v)
+{
+	t_texture	*texture;
+	double		wallX;
+	int			texX;
+	double		step;
+	double		texPos;
+	int			texY;
+	int			color;
+
+	texture = get_wall_texture(&data->textures, v);
+	if (v->side == 0) // Pared vertical
+		wallX = v->pos[1] + v->perpWallDist * v->rayDir[1];
+	else // Pared horizontal
+		wallX = v->pos[0] + v->perpWallDist * v->rayDir[0];
+	wallX -= floor(wallX);
+	texX = (int)(wallX * (double)texture->width);
+	if ((v->side == 0 && v->rayDir[0] > 0) || (v->side == 1
+			&& v->rayDir[1] < 0))
+		texX = texture->width - texX - 1;
+	step = (double)texture->height / v->lineHeight;
+	texPos = (v->draw[0] - data->screen[1] / 2 + v->lineHeight / 2) * step;
+	for (int y = v->draw[0]; y <= v->draw[1]; y++)
+	{
+		texY = (int)texPos % texture->height;
+		texPos += step;
+		color = get_texture_pixel(texture, texX, texY);
+		my_mlx_pixel_put(&data->img, x, y, color);
+	}
+}
+
+void	draw_full_vision(t_mlx_vars *data, t_vision *v, int *s, t_input imp)
 {
 	int	x;
 	int	hit;
 	int	wall_color;
 
-	// clear_image(data, s[0], s[1], create_trgb(0, 0, 0, 255));
-	draw_back(data, s[0], s[1], imp);
+	draw_back(&data->img, s[0], s[1], imp);
 	x = 0;
 	while (x < s[0])
 	{
@@ -220,7 +301,10 @@ void	draw_full_vision(t_img_data *data, t_vision *v, int *s, t_input imp)
 			else
 				wall_color = create_trgb(0, 255, 255, 0); // Pared SUR
 		}
-		drawVerLine(data, x, v->draw, wall_color);
+		if (textures_are_loaded(&data->textures))
+			draw_textured_line(data, x, v);
+		else
+			drawVerLine(&data->img, x, v->draw, wall_color);
 		x++;
 	}
 }
