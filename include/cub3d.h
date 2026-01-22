@@ -76,17 +76,26 @@ typedef struct s_vision
 	double			pos[2];
 	double			dir[2];
 	double			plane[2];
-	double			rayDir[2];
-	double			sideDist[2];
-	double			deltaDist[2];
-	double			perpWallDist;
+	double			ray_dir[2];
+	double			side_dist[2];
+	double			delta_dist[2];
+	double			perp_wall_dist;
 	double			camera;
 	int				step[2];
 	int				map[2];
 	int				draw[2];
 	int				side;
-	int				lineHeight;
+	int				line_height;
 }					t_vision;
+
+typedef struct s_texture_render
+{
+	double			wall[2];
+	int				tex[2];
+	double			step;
+	double			tex_pos;
+	int				color;
+}					t_texture_render;
 
 // Input_state // estructura para un moviminto mas fino
 typedef struct s_input_state
@@ -116,7 +125,7 @@ typedef struct s_mlx_vars
 // Functions import
 int					check_args(int argc);
 void				init_input(t_input *input);
-void				free_input(t_input *input);
+int					free_input(t_input *input);
 int					parser(int argc, char **argv, t_input *input);
 int					save_texture(char *line, char **ptr_save, int line_num);
 int					save_color(char *line, ssize_t *ptr_save, int line_num);
@@ -129,35 +138,79 @@ void				file_data_free(t_file_data *file);
 // Functions error
 void				print_error(t_return_status type);
 
-// Funcions TRGB // Utils/trgb.c
+// Functions TRGB // Graphics/trgb.c
 int					create_trgb(int t, int r, int g, int b);
 int					get_t(int trgb);
 int					get_r(int trgb);
 int					get_g(int trgb);
 int					get_b(int trgb);
 
-// temp Funcion to test // Utils/draw.c
-
-void				clear_image(t_img_data *data, int width, int height,
-						int color);
+// Graphics/rendering.c
+void				draw_back(t_img_data *img, int sx, int sy, t_input imp);
+void				draw_ver_line(t_img_data *img, int x, int *draw, int color);
+void				draw_textured_line(t_mlx_vars *data, int x, t_vision *v);
+void				draw_single_ray(t_mlx_vars *data, t_vision *v, int x);
 void				draw_full_vision(t_mlx_vars *data, t_vision *vision,
 						int *screen, t_input imput);
+
+// Graphics/raycasting.c
+void				init_ray_direction(t_vision *v, int x, int *screen_width);
+void				init_step_and_side_dist(t_vision *v);
+void				init_ray_params(t_vision *v, int x, int *screen_width);
+int					check_boundaries(t_vision *v, t_input *imp);
+int					perform_dda(t_vision *v, t_input *imp);
+void				calculate_wall_params(t_vision *v, int *screen);
+int					get_wall_color(t_vision *v);
+
+// Graphics/texture_utils.c
+t_texture			*get_wall_texture(t_textures *textures, t_vision *v);
+int					get_texture_pixel(t_texture *tex, int x, int y);
+int					textures_are_loaded(t_textures *tex);
+
+// Graphics/ray_utils.c
+double				get_delta_dist(double ray);
+void				clear_image(t_img_data *data, int width, int height,
+						int color);
+
+// Core/init.c
 void				init_vision(t_vision *vision, t_input *input);
 void				open_img(t_mlx_vars *data, t_texture *img, char *str);
+void				init_texture_params(t_texture_render *tex_vars,
+						t_texture *texture, t_vision *v, t_mlx_vars *data);
 
-// Funcion i crete to render mlx // Utils/my_mlx_func.c
+// MLX/my_mlx_func.c
 void				my_mlx_pixel_put(t_img_data *data, int x, int y, int color);
 
-// Funcion close_win // Utils/close_mlx.c
+// MLX/close_mlx.c
 int					close_mlx(t_mlx_vars *vars);
 
-// Funcion open_win // Utils/open.mlx.c
+// MLX/open_mlx.c
 int					open_win(t_mlx_vars *data, int x, int y, char *name);
 
-// Funcions to handle continuous input // Logic/handle_input.c
+// Logic/input_events.c
 int					key_press(int keysym, t_mlx_vars *data);
 int					key_release(int keysym, t_mlx_vars *data);
 int					game_loop(t_mlx_vars *data);
 void				update_movement(t_mlx_vars *data);
+void				redraw_scene(t_mlx_vars *data, int *screen, t_input input);
+
+// Functions for movement // Logic/movement.c
+void				move_forward(t_mlx_vars *data, t_input input, int *moved);
+void				move_backward(t_mlx_vars *data, t_input input, int *moved);
+void				move_left(t_mlx_vars *data, t_input input, int *moved);
+void				move_right(t_mlx_vars *data, t_input input, int *moved);
+
+// Functions for rotation // Logic/rotation.c
+void				rotate_left(t_mlx_vars *data, int *moved);
+void				rotate_right(t_mlx_vars *data, int *moved);
+
+// Core/init.c
+void				init_mlx(t_mlx_vars *mlx, t_input *input);
+
+// Core/error.c
+void				print_error(t_return_status type);
+
+// Logic/direccion.c
+void				initialdir(char direccion, double dir[2], double plane[2]);
 
 #endif

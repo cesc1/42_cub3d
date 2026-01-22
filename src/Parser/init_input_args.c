@@ -77,7 +77,7 @@ static void	free_map(t_input *input)
 	input->map = NULL;
 }
 
-void	free_input(t_input *input)
+int	free_input(t_input *input)
 {
 	free_map(input);
 	if (input->texture_n)
@@ -88,4 +88,5 @@ void	free_input(t_input *input)
 		free(input->texture_e);
 	if (input->texture_o)
 		free(input->texture_o);
+	return (1);
 }
