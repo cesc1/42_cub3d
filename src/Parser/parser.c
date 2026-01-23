@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static int	parse_line(t_input *input, char *line, int line_num, int fd)
 {
@@ -22,7 +23,7 @@ static int	parse_line(t_input *input, char *line, int line_num, int fd)
 		return (save_color(line + 1, &(input->col_c), line_num));
 	if (ft_strchr(" 1", line[0]))
 		return (create_map(input, line, fd));
-	return (ft_printf("Error\n.cub: Wrong line (l%d)\n", line_num), ERR);
+	return (printf("Error\n.cub: Wrong line (l%d)\n", line_num), ERR);
 }
 
 static int	parse_cub(t_input *input, int fd_cub)
@@ -43,9 +44,9 @@ static int	parse_cub(t_input *input, int fd_cub)
 		line = get_next_line(fd_cub);
 	}
 	if (!input->map || !input->w || !input->h)
-		return (ft_printf("Error\n.cub: Empty map\n"), ERR);
+		return (printf("Error\n.cub: Empty map\n"), ERR);
 	if (res_parse_line == OK && !input->start_dir)
-		return (ft_printf("Error\n.cub: Start position missing\n"), ERR);
+		return (printf("Error\n.cub: Start position missing\n"), ERR);
 	return (res_parse_line);
 }
 

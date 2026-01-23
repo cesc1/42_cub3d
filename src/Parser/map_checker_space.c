@@ -1,5 +1,5 @@
 #include "cub3d.h"
-
+#include <stdio.h>
 #include "libft.h"
 
 int	check_space(t_input *input_dup)
@@ -15,7 +15,7 @@ int	check_space(t_input *input_dup)
 		{
 			if (input_dup->map[h][w] == ' ')
 			{
-				ft_printf("Error\n.cub: The map is incorrect (flood fill)\n");
+				printf("Error\n.cub: The map is incorrect (flood fill)\n");
 				return (ERR);
 			}
 		}

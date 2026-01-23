@@ -1,5 +1,5 @@
 #include "cub3d.h"
-
+#include <stdio.h>
 #include "libft.h"
 
 static int	process_position(char pos, int *status)
@@ -8,7 +8,7 @@ static int	process_position(char pos, int *status)
 		return (1);
 	if (pos == '1' || pos == 'X')
 		return (0);
-	ft_printf("Error\n.cub: The map is incorrect (flood fill)\n");
+	printf("Error\n.cub: The map is incorrect (flood fill)\n");
 	*status = ERR;
 	return (0);
 }
@@ -60,7 +60,7 @@ static int	dup_pad_map(t_input *input, t_input *input_dup)
 	input_dup->h = input->h + 2;
 	input_dup->w = input->w + 2;
 	if (save_memory_map(input_dup) != OK)
-		return (ft_printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
+		return (printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
 	i = -1;
 	while (++i < input->h)
 	{

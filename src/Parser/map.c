@@ -1,6 +1,7 @@
 #include "cub3d.h"
 #include <libft.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static int	copy_map(t_file_data *raw_map, t_input *input)
 {
@@ -37,7 +38,7 @@ int	save_memory_map(t_input *input)
 
 	input->map = ft_calloc(input->h, sizeof(char *));
 	if (!input->map)
-		return (ft_printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
+		return (printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
 	i = -1;
 	while (++i < input->h)
 	{
@@ -45,7 +46,7 @@ int	save_memory_map(t_input *input)
 		if (!input->map[i])
 		{
 			free_map(input);
-			return (ft_printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
+			return (printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
 		}
 	}
 	return (OK);
@@ -60,7 +61,7 @@ static int	read_raw_map(t_file_data *raw_map, char *line, int fd)
 	flag_eof = 0;
 	line = ft_strdup(line);
 	if (!line)
-		return (ft_printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
+		return (printf("Error\n.cub: Malloc error\n"), ERR_MALLOC);
 	while (line)
 	{
 		if (map_process_line(raw_map, line, &flag_eof) != OK)
@@ -75,7 +76,7 @@ int	create_map(t_input *input, char *line, int fd)
 	t_file_data	raw_map;
 
 	if (read_raw_map(&raw_map, line, fd) != OK)
-		return (ERR);
+		return (file_data_free(&raw_map), ERR);
 	input->h = raw_map.size;
 	input->w = raw_map.max_width;
 	if (save_memory_map(input) != OK || copy_map(&raw_map, input) != OK)

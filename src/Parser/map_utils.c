@@ -1,7 +1,6 @@
 #include "cub3d.h"
-
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "libft.h"
 
 int	check_start_pos(t_input *input, int r, int c)
@@ -9,7 +8,7 @@ int	check_start_pos(t_input *input, int r, int c)
 	if (!ft_strchr("NSEW", input->map[r][c]))
 		return (OK);
 	if (input->start_dir)
-		return (ft_printf("Error\n.cub: Map double start position\n"), ERR);
+		return (printf("Error\n.cub: Map double start position\n"), ERR);
 	input->start_dir = input->map[r][c];
 	input->start_row = r;
 	input->start_col = c;
@@ -43,12 +42,12 @@ int	map_process_line(t_file_data *raw_map, char *line, int *flag_eof)
 	else
 	{
 		if (*flag_eof == 1)
-			return (free(line), ft_printf("Error\n.cub: Map\n"), ERR);
+			return (free(line), printf("Error\n.cub: Map\n"), ERR);
 		if (file_data_push(raw_map, line) != OK || \
 			check_line(raw_map, line) != OK)
 		{
 			file_data_free(raw_map);
-			ft_printf("Error\n.cub: Map");
+			printf("Error\n.cub: Map");
 			return (ERR);
 		}
 	}

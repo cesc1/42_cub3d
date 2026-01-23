@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static int	str_isdigit_valid(char *str)
 {
@@ -28,18 +29,18 @@ static int	col_str_to_ssize(char *str, ssize_t *ptr_save, int line_num)
 
 	arr = ft_split(str, ',');
 	if (!arr)
-		return (ft_printf("Error\n.cub: Malloc (l%d)\n", line_num), ERR_MALLOC);
+		return (printf("Error\n.cub: Malloc (l%d)\n", line_num), ERR_MALLOC);
 	i = -1;
 	*ptr_save = 0;
 	while (arr[++i] && i < 4)
 	{
 		if (str_isdigit_valid(arr[i]) != OK)
-			return (ft_printf("Error\n.cub: Wrong color params (l%d)\n",
+			return (printf("Error\n.cub: Wrong color params (l%d)\n",
 					line_num), ft_free_split(arr), ERR);
 		*ptr_save = (*ptr_save << 8) | ft_atoi(arr[i]);
 	}
 	if (i != 3)
-		return (ft_printf("Error\n.cub: Wrong color params (l%d)\n", line_num),
+		return (printf("Error\n.cub: Wrong color params (l%d)\n", line_num),
 			ft_free_split(arr), ERR);
 	ft_free_split(arr);
 	return (OK);
@@ -55,9 +56,9 @@ static char	*line_cleaner(char *line, int line_num)
 		line[n - 1] = '\0';
 	result = ft_strtrim(line, " ");
 	if (!result)
-		return (ft_printf("Error\n.cub: Malloc (l%d)\n", line_num), NULL);
+		return (printf("Error\n.cub: Malloc (l%d)\n", line_num), NULL);
 	if (ft_strlen(result) == 0)
-		return (ft_printf("Error\n.cub: Texture/color empty (l%d)\n", line_num),
+		return (printf("Error\n.cub: Texture/color empty (l%d)\n", line_num),
 			NULL);
 	return (result);
 }
@@ -68,7 +69,7 @@ int	save_color(char *line, ssize_t *ptr_save, int line_num)
 	char	*clean_line;
 
 	if (*ptr_save != -1)
-		return (ft_printf("Error\n.cub: Color dup (l%d)\n", line_num), ERR);
+		return (printf("Error\n.cub: Color dup (l%d)\n", line_num), ERR);
 	clean_line = line_cleaner(line, line_num);
 	if (!clean_line)
 		return (ERR);
@@ -82,7 +83,7 @@ int	save_texture(char *line, char **ptr_save, int line_num)
 	int	fd;
 
 	if (*ptr_save != NULL)
-		return (ft_printf("Error\n.cub: Texture dup (l%d)\n", line_num), ERR);
+		return (printf("Error\n.cub: Texture dup (l%d)\n", line_num), ERR);
 	*ptr_save = line_cleaner(line, line_num);
 	if (!(*ptr_save))
 		return (ERR);

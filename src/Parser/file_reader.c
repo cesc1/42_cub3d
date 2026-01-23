@@ -1,6 +1,7 @@
 #include "cub3d.h"
-#include "libft.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include "libft.h"
 
 void	file_data_free(t_file_data *file)
 {
@@ -28,7 +29,7 @@ int	file_data_init(t_file_data *file)
 	file->capacity = FILE_DATA_CAP_INIT;
 	file->data = ft_calloc(file->capacity, sizeof(char *));
 	if (!file->data)
-		return (ft_printf("Error\n.cub: Malloc fail parsing map\n"),
+		return (printf("Error\n.cub: Malloc fail parsing map\n"),
 			ERR_MALLOC);
 	return (OK);
 }
@@ -43,7 +44,7 @@ int	file_data_push(t_file_data *file, char *line)
 		file->capacity *= 2;
 		new_data = ft_calloc(file->capacity, sizeof(char *));
 		if (!new_data)
-			return (ft_printf("Error\n.cub: Malloc fail parsing map\n"),
+			return (printf("Error\n.cub: Malloc fail parsing map\n"),
 				ERR_MALLOC);
 		i = -1;
 		while (++i < (int)file->size)
