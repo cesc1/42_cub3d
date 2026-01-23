@@ -53,7 +53,8 @@ C 225,30,0
 ```bash
 # Run with a map file
 ./cub3D path/to/your_map.cub
-
+```
+```bash
 # Example with provided test map
 ./cub3D data/map_test_general.cub
 ```
