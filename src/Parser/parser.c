@@ -5,6 +5,18 @@
 #include <unistd.h>
 #include <stdio.h>
 
+static void	read_rest_file(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+}
+
 static int	parse_line(t_input *input, char *line, int line_num, int fd)
 {
 	if (line[0] == '\n')
@@ -39,10 +51,13 @@ static int	parse_cub(t_input *input, int fd_cub)
 		line_count++;
 		res_parse_line = parse_line(input, line, line_count, fd_cub);
 		free(line);
-		if (res_parse_line != OK || input->map != NULL)
-			break ;
+		if (input->map != NULL)
+			break;
+		if (res_parse_line != OK)
+			return (read_rest_file(fd_cub), ERR);
 		line = get_next_line(fd_cub);
 	}
+	read_rest_file(fd_cub);
 	if (!input->map || !input->w || !input->h)
 		return (printf("Error\n.cub: Empty map\n"), ERR);
 	if (res_parse_line == OK && !input->start_dir)
