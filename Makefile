@@ -17,16 +17,28 @@ MLX_STAMP := $(MLX_DIR)/.downloaded
 
 # Files (don't add "src/")
 SRC := main.c \
-	   error.c \
-	   import_tmp_map.c \
-	   import_tmp_map_utils.c \
-	   Utils/trgb.c \
-	   Utils/open_mlx.c \
-	   Utils/close_mlx.c \
-	   Utils/my_mlx_func.c \
-	   Utils/draw.c \
-	   Logic/handle_input.c
-
+	   Core/error.c \
+	   Core/init.c \
+	   Parser/parser.c \
+	   Parser/init_input_args.c \
+	   Parser/save_texture.c \
+	   Parser/map.c \
+	   Parser/map_checker.c \
+	   Parser/map_checker_space.c \
+	   Parser/map_utils.c \
+	   Parser/file_reader.c \
+	   Graphics/trgb.c \
+	   Graphics/rendering.c \
+	   Graphics/raycasting.c \
+	   Graphics/texture_utils.c \
+	   Graphics/ray_utils.c \
+	   MLX/open_mlx.c \
+	   MLX/close_mlx.c \
+	   MLX/my_mlx_func.c \
+	   Logic/input_events.c \
+	   Logic/movement.c \
+	   Logic/rotation.c \
+	   Logic/direccion.c
 
 OBJ := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 DEP := $(addprefix $(OBJ_DIR)/, $(SRC:.c=.d))

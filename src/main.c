@@ -1,41 +1,28 @@
 #include "cub3d.h"
-
-#include <X11/X.h>
-
 #include "libft.h"
 #include "mlx.h"
+#include <X11/X.h>
+#include <stdio.h>
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	t_input	input;
- 	t_mlx_vars	mlx;
-  int			x;
-	int			y;
+	t_input		input;
+	t_mlx_vars	mlx;
 
-	input.map = import_tmp_map("data/fakemap.cub");
-	input.texture_n = "...";
-	input.texture_s = "...";
-	input.texture_e = "...";
-	input.texture_o = "...";
-	input.col_c = 0x00000000;
-	input.col_f = 0x00000000;
-	print_map(&input);
-	free_map(input.map);
-//========================	
-	x = 1000;
-	y = 1000;
-	if (open_win(&mlx, x, y, "cub3d") != 0)
-		return (1);
-	mlx.img.img = mlx_new_image(mlx.mlx, x, y);
-	mlx.img.addr = mlx_get_data_addr(mlx.img.img, &mlx.img.bits_per_pixel,
-			&mlx.img.line_length, &mlx.img.endian);
-	// Inicializar valores de visión
-	init_vision(&mlx.vision, x, y);
-	// Dibujar toda la visión
-	draw_full_vision(&mlx.img, &mlx.vision);
+	if (parser(argc, argv, &input) != OK)
+		return (free_input(&input), 1);
+	mlx.screen[0] = 1920;
+	mlx.screen[1] = 1080;
+	if (open_win(&mlx, mlx.screen[0], mlx.screen[1], "cub3d") != 0)
+		return (free_input(&input), 1);
+	init_mlx(&mlx, &input);
+	draw_full_vision(&mlx, &mlx.vision, mlx.screen, input);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img.img, 0, 0);
-	mlx_hook(mlx.win, KeyPress, KeyPressMask, handle_input, &mlx);
+	mlx_hook(mlx.win, KeyPress, KeyPressMask, key_press, &mlx);
+	mlx_hook(mlx.win, KeyRelease, KeyReleaseMask, key_release, &mlx);
 	mlx_hook(mlx.win, 17, 0L, close_mlx, &mlx);
+	mlx_loop_hook(mlx.mlx, game_loop, &mlx);
 	mlx_loop(mlx.mlx);
+	free_input(&input);
 	return (0);
 }

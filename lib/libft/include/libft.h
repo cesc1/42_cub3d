@@ -67,5 +67,6 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_printf(char const *str, ...);
 char	*get_next_line(int fd);
+void	ft_free_split(char **split);
 
 #endif
