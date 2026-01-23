@@ -33,7 +33,7 @@ typedef struct s_input
 	char			start_dir;
 }					t_input;
 
-// Estructura para file_reader
+// Estructura para guardar lineas de un fichero
 typedef struct s_file_data
 {
 	char			**data;
@@ -125,15 +125,22 @@ typedef struct s_mlx_vars
 // Functions import
 int					check_args(int argc);
 void				init_input(t_input *input);
-int					free_input(t_input *input);
+void				free_map(t_input *input);
+void				free_input(t_input *input);
 int					parser(int argc, char **argv, t_input *input);
+int					save_memory_map(t_input *input);
 int					save_texture(char *line, char **ptr_save, int line_num);
 int					save_color(char *line, ssize_t *ptr_save, int line_num);
 int					create_map(t_input *input, char *line, int fd);
+int					flood_fill(t_input *input);
 void				input_print(t_input *input);
 int					file_data_init(t_file_data *file);
 int					file_data_push(t_file_data *file, char *line);
 void				file_data_free(t_file_data *file);
+int					check_space(t_input *input_dup);
+int					check_start_pos(t_input *input, int r, int c);
+int					map_process_line(t_file_data *raw_map, char *line, \
+	int *flag_eof);
 
 // Functions error
 void				print_error(t_return_status type);

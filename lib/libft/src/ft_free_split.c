@@ -8,9 +8,9 @@ void	ft_free_split(char **split)
 		return ;
 	i = -1;
 	while (split[++i])
-    {
-        free(split[i]);
-        split[i] = NULL;
-    }
+	{
+		free(split[i]);
+		split[i] = NULL;
+	}
 	free(split);
 }

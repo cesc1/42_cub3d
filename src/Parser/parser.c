@@ -39,10 +39,14 @@ static int	parse_cub(t_input *input, int fd_cub)
 		res_parse_line = parse_line(input, line, line_count, fd_cub);
 		free(line);
 		if (res_parse_line != OK || input->map != NULL)
-			return (res_parse_line);
+			break ;
 		line = get_next_line(fd_cub);
 	}
-	return (OK);
+	if (!input->map || !input->w || !input->h)
+		return (ft_printf("Error\n.cub: Empty map\n"), ERR);
+	if (res_parse_line == OK && !input->start_dir)
+		return (ft_printf("Error\n.cub: Start position missing\n"), ERR);
+	return (res_parse_line);
 }
 
 int	parser(int argc, char **argv, t_input *input)
@@ -58,5 +62,7 @@ int	parser(int argc, char **argv, t_input *input)
 		return (print_error(ERR_OPEN), ERR);
 	res_parse_cub = parse_cub(input, fd_cub);
 	close(fd_cub);
-	return (res_parse_cub);
+	if (res_parse_cub != OK || flood_fill(input) != OK)
+		return (ERR);
+	return (OK);
 }

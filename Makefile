@@ -23,6 +23,9 @@ SRC := main.c \
 	   Parser/init_input_args.c \
 	   Parser/save_texture.c \
 	   Parser/map.c \
+	   Parser/map_checker.c \
+	   Parser/map_checker_space.c \
+	   Parser/map_utils.c \
 	   Parser/file_reader.c \
 	   Graphics/trgb.c \
 	   Graphics/rendering.c \

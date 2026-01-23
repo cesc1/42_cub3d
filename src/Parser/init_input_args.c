@@ -58,7 +58,7 @@ void	init_input(t_input *input)
 	input->start_dir = '\0';
 }
 
-static void	free_map(t_input *input)
+void	free_map(t_input *input)
 {
 	int	i;
 
@@ -77,7 +77,7 @@ static void	free_map(t_input *input)
 	input->map = NULL;
 }
 
-int	free_input(t_input *input)
+void	free_input(t_input *input)
 {
 	free_map(input);
 	if (input->texture_n)
@@ -88,5 +88,4 @@ int	free_input(t_input *input)
 		free(input->texture_e);
 	if (input->texture_o)
 		free(input->texture_o);
-	return (1);
 }
