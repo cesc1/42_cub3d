@@ -22,6 +22,16 @@ int	open_win(t_mlx_vars *data, int x, int y, char *name)
 
 void	open_img(t_mlx_vars *data, t_texture *img, char *str)
 {
+	if (!str)
+	{
+		printf("Advertencia: No se pudo cargar la imagen %s\n", str);
+		printf("Se usará color por defecto\n");
+		img->img = NULL;
+		img->addr = NULL;
+		img->width = 0;
+		img->height = 0;
+		return ;
+	}
 	img->img = mlx_xpm_file_to_image(data->mlx, str, &img->width, &img->height);
 	if (img->img == NULL)
 	{

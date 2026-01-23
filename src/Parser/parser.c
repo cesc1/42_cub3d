@@ -1,9 +1,9 @@
 #include "cub3d.h"
 #include "libft.h"
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
 
 static void	read_rest_file(int fd)
 {
@@ -52,7 +52,7 @@ static int	parse_cub(t_input *input, int fd_cub)
 		res_parse_line = parse_line(input, line, line_count, fd_cub);
 		free(line);
 		if (input->map != NULL)
-			break;
+			break ;
 		if (res_parse_line != OK)
 			return (read_rest_file(fd_cub), ERR);
 		line = get_next_line(fd_cub);
