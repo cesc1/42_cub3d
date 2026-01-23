@@ -1,8 +1,6 @@
 #include "cub3d.h"
-
-#include <stdlib.h>
-
 #include "libft.h"
+#include <stdlib.h>
 
 int	check_start_pos(t_input *input, int r, int c)
 {
@@ -44,8 +42,8 @@ int	map_process_line(t_file_data *raw_map, char *line, int *flag_eof)
 	{
 		if (*flag_eof == 1)
 			return (free(line), ft_printf("Error\n.cub: Map\n"), ERR);
-		if (file_data_push(raw_map, line) != OK || \
-			check_line(raw_map, line) != OK)
+		if (file_data_push(raw_map, line) != OK || check_line(raw_map,
+				line) != OK)
 		{
 			file_data_free(raw_map);
 			ft_printf("Error\n.cub: Map");

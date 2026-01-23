@@ -15,8 +15,8 @@ static int	copy_map(t_file_data *raw_map, t_input *input)
 		flag_endl = 0;
 		while (++c < input->w)
 		{
-			if (!flag_endl && \
-				(!raw_map->data[r][c] || raw_map->data[r][c] == '\n'))
+			if (!flag_endl && (!raw_map->data[r][c]
+				|| raw_map->data[r][c] == '\n'))
 				flag_endl = 1;
 			if (flag_endl)
 				input->map[r][c] = ' ';

@@ -1,5 +1,4 @@
 #include "cub3d.h"
-
 #include "libft.h"
 
 int	check_space(t_input *input_dup)

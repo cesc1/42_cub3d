@@ -1,5 +1,4 @@
 #include "cub3d.h"
-
 #include "libft.h"
 
 static int	process_position(char pos, int *status)
